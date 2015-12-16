@@ -1,2 +1,2 @@
 # ffcoffeeshop
-An open source platform for mini coffee shop management application.
+An open source for mini coffee shop management application.
