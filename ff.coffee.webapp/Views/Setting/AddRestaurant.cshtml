@@ -1,0 +1,63 @@
+﻿@model ff.coffee.webapp.Models.RestaurantViewModels
+<div class="panel panel-default">
+    <div class="panel-body">
+        @if (Model != null)
+        {
+            using (@Html.BeginForm("AddRestaurant", "Setting", null, FormMethod.Post, new { Class = "form-horizontal", id = "resAdd", name = "resAdd" }))
+            {
+                <h1>@SettingPageResource.SettingRestAddHeader</h1>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Name, SettingPageResource.SettingRestNameLabel, new { Class = "col-sm-2 control-label" })
+                    <div class="col-sm-10">
+                        @Html.TextBoxFor(m => m.Name, new { Class = "form-control", placeholder = SettingPageResource.SettingRestNameLabel })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Address, SettingPageResource.SettingAddressLabel, new { Class = "col-sm-2 control-label" })
+                    <div class="col-sm-10">
+                        @Html.TextBoxFor(m => m.Address, new { Class = "form-control", placeholder = SettingPageResource.SettingAddressLabel })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Phone, SettingPageResource.SettingPhoneLabel, new { Class = "col-sm-2 control-label" })
+                    <div class="col-sm-10">
+                        @Html.TextBoxFor(m => m.Phone, new { Class = "form-control", placeholder = SettingPageResource.SettingPhoneLabel })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Fax, SettingPageResource.SettingFaxLabel, new { Class = "col-sm-2 control-label" })
+                    <div class="col-sm-10">
+                        @Html.TextBoxFor(m => m.Fax, new { Class = "form-control", placeholder = SettingPageResource.SettingFaxLabel })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Email, SettingPageResource.SettingEmailLabel, new { Class = "col-sm-2 control-label" })
+                    <div class="col-sm-10">
+                        @Html.TextBoxFor(m => m.Email, new { Class = "form-control", placeholder = SettingPageResource.SettingEmailLabel })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Website, SettingPageResource.SettingWebsiteLabel, new { Class = "col-sm-2 control-label" })
+                    <div class="col-sm-10">
+                        @Html.TextBoxFor(m => m.Website, new { Class = "form-control", placeholder = SettingPageResource.SettingWebsiteLabel })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.PrintSize, SettingPageResource.SettingRestPrintSizeLabel, new { Class = "col-sm-2 control-label" })
+                    <div class="col-sm-10">
+                        @Html.DropDownListFor(m => m.PrintSize, new SelectList(new List<SelectListItem> {
+                                                                                        new SelectListItem { Text = "A5", Value = "A5", Selected = true },
+                                                                                        new SelectListItem { Text = "K80", Value = "K80", Selected = false },
+                                                                                        new SelectListItem { Text = "K57", Value = "K57", Selected = false } }, "Value", "Text"),
+                                                                              new { Class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-3 submit-container">
+                        <button type="submit" class="form-control btn btn-primary">@SettingPageResource.SettingSaveButton</button>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>

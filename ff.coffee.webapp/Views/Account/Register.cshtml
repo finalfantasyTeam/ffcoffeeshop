@@ -1,0 +1,46 @@
+﻿@model ff.coffee.webapp.Models.RegisterModel
+
+<div class="panel panel-default">
+    <div class="panel-body">
+        @if (Model != null)
+        {
+            using (@Html.BeginForm("Register", "Account", null, FormMethod.Post, new { Class = "form-horizontal", id = "userAdd", name = "userAdd" }))
+            {
+                <h1>@AccountPageResource.AccCreateNew</h1>
+                <div class="form-group">
+                     @Html.LabelFor(m => m.UserName, AccountPageResource.AccUserNameLabel, new { Class = "col-sm-2 control-label" })
+                    <div class="col-sm-10">
+                        @Html.TextBoxFor(m => m.UserName, new { Class = "form-control", placeholder = AccountPageResource.AccUserNameLabel })
+                    </div>
+                </div>
+                <div class="form-group">
+                     @Html.LabelFor(m => m.Password, AccountPageResource.AccPasswordLabel, new { Class = "col-sm-2 control-label" })
+                    <div class="col-sm-10">
+                        @Html.PasswordFor(m => m.Password, new { Class = "form-control", placeholder = AccountPageResource.AccPasswordLabel })
+                    </div>
+                </div>
+                <div class="form-group">
+                     @Html.LabelFor(m => m.ConfirmPassword, AccountPageResource.AccConfirmPassLabel, new { Class = "col-sm-2 control-label" })
+                    <div class="col-sm-10">
+                        @Html.PasswordFor(m => m.ConfirmPassword, new { Class = "form-control", placeholder = AccountPageResource.AccConfirmPassLabel })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Role, AccountPageResource.AccUserRoleLabel, new { Class = "col-sm-2 control-label" })
+                    <div class="col-sm-10">
+                        @Html.DropDownListFor(m => m.Role, new SelectList(Model.ListRoles, "Value", "Key"), new { Class = "form-control" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-3 submit-container">
+                        <button type="submit" class="form-control btn btn-primary">@AccountPageResource.AccSaveButton</button>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

@@ -1,0 +1,46 @@
+th {
+   background:#50F4A9;
+}
+
+#lstOrdered>tbody>tr>td {
+    vertical-align: middle;
+}
+
+.form-signin {
+    max-width: 330px;
+    padding: 15px;
+    margin: 0 auto;
+}
+
+.form-signin .field {
+    margin-bottom: 10px;
+}
+
+h2.form-signin-heading {
+    text-align: center;
+}
+
+.group-top-a {
+   width: 185px;
+   margin-bottom: 5px;
+}
+
+.table-layout {
+    margin-bottom: 10px;
+}
+
+.btn-table {
+    height: 80px;
+    width: 100%;
+    line-height: 3em;
+}
+
+.btn-storage {
+    width: 100%;
+    margin: 10px;
+}
+
+#thanhtoan {
+    float: right;
+    margin: 5px;
+}

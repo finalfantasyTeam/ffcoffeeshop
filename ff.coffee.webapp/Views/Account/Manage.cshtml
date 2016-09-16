@@ -1,0 +1,68 @@
+﻿@model ff.coffee.webapp.Models.RegisterModel
+<div class="panel panel-default">
+    <div class="panel-body">
+        @if (Model != null)
+        {
+            using (@Html.BeginForm("Manage", "Account", null, FormMethod.Post, new { Class = "form-horizontal", id = "userEdit", name = "userEdit" }))
+            {
+                <h1>@AccountPageResource.AccEditInfo</h1>
+                @Html.HiddenFor(m => m.UserName, new { id = "userName" })
+                @Html.HiddenFor(m => m.Id)
+                <div class="form-group">
+                    @Html.LabelFor(m => m.StaffName, AccountPageResource.AccUserFullNameLabel, new { Class = "col-sm-2 control-label" })
+                    <div class="col-sm-10">
+                        @Html.TextBoxFor(m => m.StaffName, new { Class = "form-control", placeholder = AccountPageResource.AccUserFullNameLabel })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Position, AccountPageResource.AccUserPositionLabel, new { Class = "col-sm-2 control-label" })
+                    <div class="col-sm-10">
+                        @Html.TextBoxFor(m => m.Position, new { Class = "form-control", placeholder = AccountPageResource.AccUserPositionLabel })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.NewPassword, AccountPageResource.AccPasswordLabel, new { Class = "col-sm-2 control-label" })
+                    <div class="col-sm-10">
+                        @Html.PasswordFor(m => m.NewPassword, new { Class = "form-control", placeholder = AccountPageResource.AccEditPasswordLabel })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.ConfirmNewPassword, AccountPageResource.AccConfirmPassLabel, new { Class = "col-sm-2 control-label" })
+                    <div class="col-sm-10">
+                        @Html.PasswordFor(m => m.ConfirmNewPassword, new { Class = "form-control", placeholder = AccountPageResource.AccConfirmEditPassLabel })
+                    </div>
+                </div>
+                <div class="form-group">
+                  @if (User.IsInRole("Admin,Manager,ViceManager"))
+                  { 
+                    @Html.LabelFor(m => m.Role, AccountPageResource.AccUserRoleLabel, new { Class = "col-sm-2 control-label" })
+                    <div class="col-sm-10">
+                      @Html.DropDownListFor(m => m.Role, new SelectList(Model.ListRoles, "Value", "Key"), new { Class = "form-control" })
+                    </div>
+                  }
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Notes, AccountPageResource.AccUserNotesLabel, new { Class = "col-sm-2 control-label" })
+                    <div class="col-sm-10">
+                        @Html.TextBoxFor(m => m.Notes, new { Class = "form-control", placeholder = AccountPageResource.AccUserNotesLabel })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-3 submit-container">
+                        <button type="submit" class="form-control btn btn-primary">@AccountPageResource.AccUpdateButton</button>
+                    </div>
+                    @if (User.IsInRole("Admin"))
+                    {
+                      <div class="col-sm-4 submit-container">
+                        <a class="form-control btn btn-danger" id="btnDeleteStaff">@AccountPageResource.UserDeleteButton</a>
+                      </div>
+                    }
+                </div>
+            }
+        }
+    </div>
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

@@ -1,0 +1,36 @@
+﻿@model ff.coffee.webapp.Models.RegisterModel
+<h1>@AccountPageResource.UserListHeader</h1>
+
+<div class="panel panel-default">
+  <table class="table">
+    <tr class="header">
+      <th>@AccountPageResource.UserNameHeader</th>
+      <th>@AccountPageResource.RoleNameHeader</th>
+      <th>@AccountPageResource.UserFullNameHeader</th>
+      <th>@AccountPageResource.UserPositionHeader</th>
+      <th>@AccountPageResource.ButtonEditUser</th>
+    </tr>
+    @{
+      var oeRow = 0;
+      string classRow = "";
+    }
+    @foreach (var userData in Model.ListUser)
+    {
+      oeRow++;
+      if (oeRow == 2)
+      {
+        oeRow = 0;
+      }
+      classRow = "r" + oeRow;
+      <tr class="@classRow">
+        <td>@userData.UserName</td>
+        <td>@Model.ListRoles.Where(r => r.Value == userData.Role).Single().Key</td>
+        <td>@userData.StaffName</td>
+        <td>@userData.Position</td>
+        <td>
+          @Html.ActionLink(AccountPageResource.ButtonEditUser, "Manage", "Account", new { userName = userData.UserName }, new { Class = "btn btn-default" })
+        </td>
+      </tr>
+    }
+  </table>
+</div>

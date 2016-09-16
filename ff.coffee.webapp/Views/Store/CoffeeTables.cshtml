@@ -1,0 +1,35 @@
+﻿@model ff.coffee.webapp.Models.CoffeeTableViewModels
+<h1>@StorePageResource.TableListHeader</h1>
+@Html.ActionLink(StorePageResource.ButtonAddNewTable, "AddCoffeeTable", "Setting", new { Id = 0 }, new { Class = "btn btn-lg btn-info" })
+
+<div class="panel panel-default">
+    <table class="table">
+        <tr class="header">
+            <th>@StorePageResource.TableNameHeader</th>
+            <th>@StorePageResource.TableAreaUnitHeader</th>
+            <th>@StorePageResource.TableNotesHeader</th>
+            <th>@StorePageResource.ButtonEditTable</th>
+        </tr>
+        @{
+            var oeRow = 0;
+            string classRow = "";
+        }
+        @foreach (var tableData in Model.ListCoffeeTables)
+        {
+            oeRow++;
+            if (oeRow == 2)
+            {
+                oeRow = 0;
+            }
+            classRow = "r" + oeRow;
+            <tr class="@classRow">
+                <td>@tableData.Name</td>
+                <td>@tableData.Area.Name</td>
+                <td>@tableData.Notes</td>
+                <td>
+                    @Html.ActionLink(StorePageResource.ButtonEditTable, "EditCoffeeTable", "Setting", new { Id = tableData.ID }, new { Class = "btn btn-default" })
+                </td>
+            </tr>
+        }
+    </table>
+</div>

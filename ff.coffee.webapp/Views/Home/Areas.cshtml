@@ -1,0 +1,40 @@
+﻿@model ff.coffee.webapp.Models.AreasViewModels
+
+<h1 class="list-header">@HomePageResource.AreaListHeader @(!String.IsNullOrEmpty(Model.SalePointName) ? Model.SalePointName.ToUpper() : "") </h1>
+@Html.ActionLink(HomePageResource.ButtonAddNewArea, "AddArea", "Setting", new { Id = 0 }, new { Class = "btn btn-lg btn-info" })
+<div class="panel panel-default">
+    <table class="table">
+        <tr class="header">
+            <th>@HomePageResource.AreaNameHeader</th>
+            <th>@HomePageResource.AreaSalePointHeader</th>
+            <th>@HomePageResource.AreaTableListHeader</th>
+            <th>@HomePageResource.ButtonEditArea</th>
+        </tr>
+        @{
+            var oeRow = 0;
+            string classRow = "";
+            string listTablesLink = "";
+        }
+        @foreach (var areaData in Model.ListAreas)
+        {
+            oeRow++;
+            if (oeRow == 2)
+            {
+                oeRow = 0;
+            }
+
+            classRow = "r" + oeRow;
+
+            <tr class="@classRow">
+                <td id="RestName" class="upper">@areaData.Name</td>
+                <td id="SpAddress" class="capital">@areaData.SalePoint1.Name</td>
+                <td>
+                    @Html.ActionLink(HomePageResource.AreaTableListHeader, "CoffeeTable", "Home", new { Id = areaData.ID }, new { Class = "btn btn-warning" })
+                </td>
+                <td>
+                    @Html.ActionLink(HomePageResource.ButtonEditArea, "EditArea", "Setting", new { Id = areaData.ID }, new { Class = "btn btn-default" })
+                </td>
+            </tr>
+        }
+    </table>
+</div>

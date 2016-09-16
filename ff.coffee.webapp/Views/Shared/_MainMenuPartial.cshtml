@@ -1,0 +1,84 @@
+﻿<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <span class="navbar-brand">@MenuResource.MenuLabel</span>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li role="presentation">
+          @Html.ActionLink(MenuResource.HomeLabel, "Index", "Home")
+        </li>
+        <li role="presentation">
+          @Html.ActionLink(MenuResource.ChangeTableLabel, "ChangeTable", "Order")
+        </li>
+        @{
+          if (User.IsInRole("Admin"))
+          {
+            <li role='presentation' class="dropdown">
+              <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                @MenuResource.ReportLabel <span class="caret"></span>
+              </a>
+              <ul class="dropdown-menu">
+                <li>@Html.ActionLink(MenuResource.ReportSalesLabel, "ReportSales", "Report")</li>
+                <li>@Html.ActionLink(MenuResource.ReportIncomeStatementLabel, "ReportIncomeStatement", "Report")</li>
+              </ul>
+            </li>
+            <li role='presentation'>
+              @Html.ActionLink(MenuResource.StorageLabel, "StoreLanding", "Home")
+            </li>
+            <li role='presentation'>
+              @Html.ActionLink(MenuResource.ManageUserLabel, "UserManagement", "Account")
+            </li>
+            <li role='presentation'>
+              @Html.ActionLink(MenuResource.RegisterUserLabel, "Register", "Account")
+            </li>
+          }
+        }
+        <li role="presentation">
+          @Html.ActionLink(User.FullName, "Manage", "Account")
+        </li>
+        <li role="presentation">
+          <div>
+            @Html.ActionLink(MenuResource.LogoutLabel, "Logout", "Account", null, new { Class = "btn btn-default navbar-btn", name = "logout" })
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+  @if (User.IsInRole("Admin"))
+  {
+    @Html.ActionLink(MenuResource.ListRestaurantLabel, "Restaurant", "Home", new { Id = 0 }, new { Class = "btn btn-lg btn-success group-top-a" })
+  }
+  @if (User.IsInRole("Admin,ViceManager"))
+  {
+    @Html.ActionLink(MenuResource.SalePointLabel, "SalePoint", "Home", new { Id = 0 }, new { Class = "btn btn-lg btn-success group-top-a" })
+  }
+  @if (User.IsInRole("Admin,ViceManager,Manager"))
+  {
+    <div class="btn-group">
+      <button type="button" data-toggle="dropdown" aria-expanded="false" class="btn btn-lg btn-success group-top-a dropdown-toggle">@MenuResource.AreasLabel<span class="caret"></span></button>
+      <ul class="dropdown-menu" role="menu">
+        <li>
+          @Html.ActionLink(MenuResource.ListAreasLabel, "Areas", "Home", new { Id = 0 }, null)
+        </li>
+        <li>
+          @Html.ActionLink(MenuResource.ListProductCatLabel, "ProductCat", "Store", new { Id = 0 }, null)
+        </li>
+        <li>
+          @Html.ActionLink(MenuResource.ListProductLabel, "Product", "Store", new { Id = 0 }, null)
+        </li>
+      </ul>
+    </div>
+    @Html.ActionLink(MenuResource.ManageTableLabel, "CoffeeTables", "Store", new { Id = 0 }, new { Class = "btn btn-lg btn-success group-top-a" })
+  }
+  @Html.ActionLink(MenuResource.ListTableLabel, "CoffeeTable", "Home", new { Id = 0 }, new { Class = "btn btn-lg btn-success group-top-a", id = "ban" })
+</div>

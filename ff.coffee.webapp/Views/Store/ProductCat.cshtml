@@ -1,0 +1,33 @@
+﻿@model ff.coffee.webapp.Models.ProductCatViewModels
+<h1>@StorePageResource.ProductCatListHeader</h1>
+@Html.ActionLink(StorePageResource.ButtonAddNewProductCat, "AddProductCat", "Store", new { Id = 0 }, new { Class = "btn btn-lg btn-info" })
+
+<div class="panel panel-default">
+    <table class="table">
+        <tr class="header">
+            <th>@StorePageResource.ProductCatNameHeader</th>
+            <th>@StorePageResource.ProductCatDescHeader</th>
+            <th>@StorePageResource.ButtonEditProductCat</th>
+        </tr>
+        @{
+            var oeRow = 0;
+            string classRow = "";
+        }
+        @foreach (var catData in Model.ListProductCat)
+        {
+            oeRow++;
+            if (oeRow == 2)
+            {
+                oeRow = 0;
+            }
+            classRow = "r" + oeRow;
+            <tr class="@classRow">
+                <td>@catData.Name</td>
+                <td>@catData.Description</td>
+                <td>
+                    @Html.ActionLink(StorePageResource.ButtonEditProductCat, "EditProductCat", "Store", new { Id = catData.ID }, new { Class = "btn btn-default" })
+                </td>
+            </tr>
+        }
+    </table>
+</div>

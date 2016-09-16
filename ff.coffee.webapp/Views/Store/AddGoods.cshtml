@@ -1,0 +1,42 @@
+﻿@model ff.coffee.webapp.Models.GoodsViewModels
+<div class="panel panel-default">
+    <div class="panel-body">
+        @if (Model != null)
+        {
+            using (@Html.BeginForm("AddGoods", "Store", null, FormMethod.Post, new { Class = "form-horizontal", id = "goodsAdd", name = "goodsAdd" }))
+            {
+                <h1>@StorePageResource.GoodsAddHeader</h1>
+                @Html.HiddenFor(m => m.UserImport, new { value = User.StaffUserName })
+                <div class="form-group">
+                    @Html.LabelFor(m => m.ProductID, StorePageResource.GoodsNameLabel, new { Class = "col-sm-2 control-label" })
+                    <div class="col-sm-10">
+                        @Html.DropDownListFor(m => m.ProductID, new SelectList(Model.ListProduct, "ID", "Name"), new { Class = "form-control", placeholder = StorePageResource.GoodsNameLabel })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Unit, StorePageResource.GoodsUnitLabel, new { Class = "col-sm-2 control-label" })
+                    <div class="col-sm-10">
+                        @Html.TextBoxFor(m => m.Unit, new { Class = "form-control", placeholder = StorePageResource.GoodsUnitLabel })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Quantity, StorePageResource.GoodsQuantityImportLabel, new { Class = "col-sm-2 control-label" })
+                    <div class="col-sm-10">
+                        @Html.TextBoxFor(m => m.Quantity, new { Class = "form-control", placeholder = StorePageResource.GoodsQuantityImportLabel })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Price, StorePageResource.GoodsOriginPriceLabel, new { Class = "col-sm-2 control-label" })
+                    <div class="col-sm-10">
+                        @Html.TextBoxFor(m => m.Price, new { Class = "form-control", placeholder = StorePageResource.GoodsOriginPriceLabel })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-3 submit-container">
+                        <button type="submit" class="form-control btn btn-primary">@StorePageResource.StoreSaveButton</button>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>
