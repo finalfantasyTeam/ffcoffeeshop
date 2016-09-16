@@ -1,0 +1,72 @@
+﻿@model ff.coffee.webapp.Models.ReportViewModels
+
+<div class="container">
+    @using (Html.BeginForm("ReportSales", "Report", FormMethod.Post, new { Class = "form-inline", id = "frmReportSales", name = "frmReportSales" }))
+    {
+        <div class="form-group">
+            @Html.LabelFor(m => m.ReportDateFrom, ReportPageResource.ReportDateFromLabel, null)
+            @Html.TextBoxFor(m => m.ReportDateFrom, new { Class = "form-control", id = "saleReportDateFrom" })
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(m => m.ReportDateTo, ReportPageResource.ReportDateToLabel, null)
+            @Html.TextBoxFor(m => m.ReportDateTo, new { Class = "form-control", id = "saleReportDateTo" })
+        </div>
+        <button id="btnSearchSalesReport" type="submit" class="btn btn-default">@ReportPageResource.ReportButtonView</button>
+    }
+    <h1>@ReportPageResource.ReportSalesHeader</h1>
+    @if (Model.ListInvoice != null)
+    {
+         <div id="ReportSalesResults" class="panel panel-default">
+             <table class="table">
+                 <tr class="header">
+                     <th>@ReportPageResource.ReportSalesDateHeader</th>
+                     <th>@ReportPageResource.ReportSalesTableHeader</th>
+                     <th>@ReportPageResource.ReportSalesCashierHeader</th>
+                     <th>@ReportPageResource.ReportSalesDiscountHeader</th>
+                     <th>@ReportPageResource.ReportSalesCostHeader</th>
+                     <th>@ReportPageResource.ButtonReportDetailHeader</th>
+                 </tr>
+                 @{
+                    var oeRow = 0;
+                    string classRow = "";
+                    decimal total = 0;
+                 }
+                 @foreach (var invoice in Model.ListInvoice)
+                 {
+                     oeRow++;
+                     if (oeRow == 2)
+                     {
+                         oeRow = 0;
+                     }
+                     classRow = "r" + oeRow;
+                     total += invoice.Total;
+                     <tr class="@classRow">
+                         <td>@invoice.DateCreate</td>
+                         <td>@invoice.CoffeeTable.Name</td>
+                         <td>@invoice.Cashier</td>
+                         <td>@invoice.Discount</td>
+                         <td>@String.Format("{0:n0} đ", invoice.Total)</td>
+                         <td>
+                             @Html.ActionLink(ReportPageResource.ReportSalesDetail, "ReportSalesDetail", "Report", new { invoiceId = invoice.ID }, new { Class = "btn btn-default" })
+                         </td>
+                     </tr>
+                 }
+                 <tr>
+                     <td colspan="4">
+                         <h2>
+                             <span class="label label-danger">@ReportPageResource.ReportSalesTotalLabel</span>
+                         </h2>
+                    </td>
+                     <td>
+                        <h2>
+                            <span class="label label-success">@String.Format("{0:n0} đ", total)</span>
+                        </h2>
+                     </td>
+                     <td>&nbsp;</td>
+                 </tr>
+             </table>
+        </div>
+    }
+    
+    <img src="@Url.Content("~/Images/loader.gif")" id="gifLoading" alt="loading" style="display:none;" />
+</div>

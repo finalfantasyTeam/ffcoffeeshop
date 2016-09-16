@@ -1,0 +1,50 @@
+﻿@model ff.coffee.webapp.Models.OrderViewModels
+
+<div id="ctnOrdering" class="container">
+  @using (Html.BeginForm("AddOrder", "Order", FormMethod.Post, new { name = "frmOrder", id = "frmOrder" }))
+  {
+    <div class="container input-group input-group-lg">
+      @Html.LabelFor(m => m.TableNotes, OrderPageResource.OrderNotesLabel, new { Class = "input-group-addon", id = "sizing-notes" })
+      @Html.TextBoxFor(m => m.TableNotes, new Dictionary<string, object>() { { "aria-describedby", "sizing-notes" }, { "id", "tblNotes" }, { "name", "tblNotes" }, { "class", "form-control" } })
+    </div>
+    <div class="container" id="ctnOrderProduct" style="display: none; clear: both;">
+      <div class="panel panel-default">
+        <h1>@OrderPageResource.OrderingListHeader</h1>
+        <table id="tblOrdering" class="table">
+          <tbody>
+            <tr>
+              <th>@OrderPageResource.OrderProductLabel</th>
+              <th>@OrderPageResource.OrderQuantityLabel</th>
+              <th>@OrderPageResource.OrderPriceLabel</th>
+              <th>@OrderPageResource.OrderCostlabel</th>
+              <th>@OrderPageResource.OrderNotesLabel</th>
+            </tr>
+          </tbody>
+        </table>
+        @Html.HiddenFor(m => m.TableID)
+        @Html.HiddenFor(m => m.ProductID, new { value = 1 })
+        <input class="btn btn-primary" style="float: right;" type="submit" name="btnSendOrder" value="@OrderPageResource.ButtonSaveOrder" />
+      </div>
+    </div>
+  }
+  <h1>@OrderPageResource.OrderSelectProductLabel</h1>
+  <div id="ctnSelectProduct">
+    <div class="col-lg-6">
+      <div class="input-group input-group-lg">
+        <label class="input-group-addon" id="sizing-product">@OrderPageResource.OrderSearchProduct</label>
+        <input aria-describedby="sizing-product" class="form-control" type="text" id="txtSearchProduct" name="txtSearchProduct" />
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <div class="input-group input-group-lg">
+        <label for="lsbProductCat" class="input-group-addon" id="sizing-productcat">@OrderPageResource.OrderSearchProductCat</label>
+        @Html.DropDownList("lsbProductCat", new SelectList(Model.ListProductCategory, "ID", "Name"), OrderPageResource.OrderChooseCat, new Dictionary<string, object>() { { "aria-describedby", "sizing-productcat" }, { "id", "lsbProductCat" }, { "class", "form-control" } })
+      </div>
+    </div>
+
+    <div id="ctnResult">
+
+    </div>
+    <img src="@Url.Content("~/Images/loader.gif")" id="gifLoading" alt="loading" style="display:none;" />
+  </div>
+</div>

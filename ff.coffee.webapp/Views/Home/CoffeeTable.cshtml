@@ -1,0 +1,35 @@
+﻿@model ff.coffee.webapp.Models.CoffeeTableViewModels
+
+<h1 class="list-header">@HomePageResource.CoffeeTblListHeader @(Model.AreaName != null ? Model.AreaName.ToUpper() : "") </h1>
+@Html.ActionLink(HomePageResource.ButtonAddNewCoffeeTbl, "AddCoffeeTable", "Setting", new { Id = 0 }, new { Class = "btn btn-lg btn-info" })
+<div class="container">
+    @{
+        var count = 1;
+    }
+    @foreach (var coffeetbl in Model.ListCoffeeTables)
+    {
+        count = count == 5 ? 1 : count;
+        if (count == 1)
+        {
+            @: <div class="row">
+            }
+        if (coffeetbl.IsServe == true)
+        {
+            <div class="col-md-3 col-xs-6 table-layout">
+                @Html.ActionLink(HomePageResource.TableLabel + ' ' + coffeetbl.Name + ' ' + coffeetbl.Area.Name, "Index", "Order", new { tableId = coffeetbl.ID, tableName = coffeetbl.Name }, new { Class = "btn btn-lg btn-danger btn-table" })
+            </div>
+        }
+        else
+        {
+            <div class="col-md-3 col-xs-6 table-layout">
+                @Html.ActionLink(HomePageResource.TableLabel + ' ' + coffeetbl.Name + ' ' + coffeetbl.Area.Name, "Index", "Order", new { tableId = coffeetbl.ID, tableName = coffeetbl.Name }, new { Class = "btn btn-lg btn-success btn-table" })
+            </div>
+        }
+        count++;
+        if (count == 5)
+        {
+            @: </div>
+        }
+    }
+</div>
+

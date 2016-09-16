@@ -1,0 +1,43 @@
+﻿@model ff.coffee.webapp.Models.GoodsViewModels
+<h1>@StorePageResource.GoodsListHeader</h1>
+@Html.ActionLink(StorePageResource.ButtonAddNewGoods, "AddGoods", "Store", new { Id = 0 }, new { Class = "btn btn-lg btn-info" })
+
+<div class="panel panel-default">
+    <table class="table">
+        <tr class="header">
+            <th>@StorePageResource.GoodsNameHeader</th>
+            <th>@StorePageResource.GoodsUnitHeader</th>
+            <th>@StorePageResource.GoodsImportPriceHeader</th>
+            <th>@StorePageResource.GoodsImportQuantityHeader</th>
+            <th>@StorePageResource.GoodsQuantityInStockHeader</th>
+            <th>@StorePageResource.GoodsQuantitySoldHeader</th>
+            <th>@StorePageResource.GoodsLastImportHeader</th>
+            <th>@StorePageResource.ButtonEditGoods</th>
+        </tr>
+        @{ 
+            var oeRow = 0;
+            string classRow = "";
+        }
+        @foreach (var goodsData in Model.ListGoods)
+        {
+            oeRow++;
+            if(oeRow == 2)
+            {
+                oeRow = 0;
+            }
+            classRow = "r" + oeRow;
+            <tr class="@classRow">
+                <td>@goodsData.Product.Name</td>
+                <td>@goodsData.UnitImport</td>
+                <td>@String.Format("{0:n0} đ",goodsData.OriginPrice)</td>
+                <td>@goodsData.QuantityImport</td>
+                <td>@goodsData.QuantityInStock</td>
+                <td>@goodsData.QuantitySold</td>
+                <td>@goodsData.LastImport</td>
+                <td>
+                   @Html.ActionLink(StorePageResource.ButtonEditGoods, "EditGoods", "Store", new { Id = goodsData.ID }, new { Class = "btn btn-default" })
+                </td>
+            </tr>
+        }
+    </table>
+</div>

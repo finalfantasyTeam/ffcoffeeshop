@@ -1,0 +1,70 @@
+﻿@{
+    Layout = null; 
+}
+@model ff.coffee.webapp.Models.ProductViewModels
+<table id="tblProductMenu" class="table">
+    <tr class="header">
+        <th>@StorePageResource.ProductNameHeader</th>
+        <th>@StorePageResource.ProductPriceHeader</th>
+    </tr>
+    @{
+        var oeRow = 0;
+        string classRow = "";
+    }
+    @foreach (var productData in Model.ListProduct)
+    {
+        oeRow++;
+        if (oeRow == 2)
+        {
+            oeRow = 0;
+        }
+        classRow = "r" + oeRow;
+        <tr class="@classRow">
+            <td class="hidden">@productData.ID</td>
+            <td>@productData.Name</td>
+            <td>@String.Format("{0:n0} đ", productData.Price)</td>
+            <td class="hidden">@productData.Price</td>
+        </tr>
+    }
+</table>
+
+<script type="text/javascript">
+    function updateTotal(quantity, price, proId) {
+        var total = quantity * price;
+
+        $("#cellTotals" + proId).html(total + " đ");
+    }
+
+    function isDuplicated(id) {
+        var productID = $("#hiddenProId" + id);
+
+        if (productID.length > 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+    $("#tblProductMenu tr").click(function () {
+        var strProduct = "<tr>",
+            tableRow = $(this).find("td");
+
+        if (!isDuplicated(tableRow[0].innerHTML)) {
+            strProduct += "<td><input id='hiddenProId" + tableRow[0].innerHTML + "' class='form-control' name='productId[]' type='hidden' value='" + tableRow[0].innerHTML + "' />" + tableRow[1].innerHTML + "</td>";
+            strProduct += "<td><input id='quantityProId" + tableRow[0].innerHTML + "' onchange='updateTotal(this.value, " + tableRow[3].innerHTML + "," + tableRow[0].innerHTML + ")' class='form-control' name='productQuatity[]' type='number' value='1'></td>";
+            strProduct += "<td>" + tableRow[2].innerHTML + "</td>";
+            strProduct += "<td id='cellTotals" + tableRow[0].innerHTML + "'></td>";
+            strProduct += "<td><input class='form-control' name='orderNotes[]' type='text'></td>"
+            strProduct += "</tr>";
+
+            $("#tblOrdering").append(strProduct);
+        } else {
+            var quantity = $("#quantityProId" + tableRow[0].innerHTML).val();
+            quantity++;
+            $("#quantityProId" + tableRow[0].innerHTML).val(quantity);
+            updateTotal(quantity, tableRow[3].innerHTML, tableRow[0].innerHTML);
+        }
+
+        $("#ctnOrderProduct").show();
+    });
+</script>

@@ -1,0 +1,25 @@
+﻿@model ff.coffee.webapp.Models.AccountModel
+<div class="container">
+    @using (Html.BeginForm("Login", "Account", null, FormMethod.Post,new { Class = "form-signin", name = "frmLogin", id = "frmLogin" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true)
+        <h2 class="form-signin-heading">@HomePageResource.LoginHeader</h2>
+        <div class="field">
+            @Html.LabelFor(m => m.UserName, HomePageResource.LoginUserName)
+            @Html.TextBoxFor(m => m.UserName, new { Class = "form-control" })
+            @Html.ValidationMessageFor(m => m.UserName)
+        </div>
+        <div class="field">
+            @Html.LabelFor(m => m.Password, HomePageResource.LoginPassword)
+            @Html.PasswordFor(m => m.Password, new { Class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Password)
+        </div>
+
+        <button class="btn btn-lg btn-primary btn-block" type="submit" name="login">@HomePageResource.LoginLabel</button>
+    }
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

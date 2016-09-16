@@ -1,0 +1,33 @@
+﻿@model ff.coffee.webapp.Models.ProductCatViewModels
+<div class="panel panel-default">
+    <div class="panel-body">
+        @if (Model != null)
+        {
+            using (@Html.BeginForm("EditProductCat", "Store", null, FormMethod.Post, new { Class = "form-horizontal", id = "catEdit", name = "catEdit" }))
+            {
+                <h1>@StorePageResource.ProductCatAddHeader</h1>
+                @Html.HiddenFor(m => m.Id, new { id = "proCatID" })
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Name, StorePageResource.ProductCatNameLabel, new { Class = "col-sm-2 control-label" })
+                    <div class="col-sm-10">
+                        @Html.TextBoxFor(m => m.Name, new { Class = "form-control", placeholder = StorePageResource.ProductNameLabel })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Description, StorePageResource.ProductCatDescLabel, new { Class = "col-sm-2 control-label" })
+                    <div class="col-sm-10">
+                        @Html.TextBoxFor(m => m.Description, new { Class = "form-control", placeholder = StorePageResource.ProductCatDescLabel })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-3 submit-container">
+                        <button type="submit" class="form-control btn btn-primary">@StorePageResource.StoreSaveButton</button>
+                    </div>
+                    <div class="col-sm-4 submit-container">
+                        <a href="#" class="form-control btn btn-danger" id="btnDeleteProductCat">@StorePageResource.StoreProdcutCatDeleteButton</a>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>

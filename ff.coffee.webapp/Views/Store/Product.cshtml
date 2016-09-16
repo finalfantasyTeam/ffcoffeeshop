@@ -1,0 +1,39 @@
+﻿@model ff.coffee.webapp.Models.ProductViewModels
+<h1>@StorePageResource.ProductListHeader</h1>
+@Html.ActionLink(StorePageResource.ButtonAddNewProduct, "AddProduct", "Store", new { Id = 0 }, new { Class = "btn btn-lg btn-info" })
+
+<div class="panel panel-default">
+    <table class="table">
+        <tr class="header">
+            <th>@StorePageResource.ProductNameHeader</th>
+            <th>@StorePageResource.ProductUnitHeader</th>
+            <th>@StorePageResource.ProductPriceHeader</th>
+            <th>@StorePageResource.ProductCatHeader</th>
+            <th>@StorePageResource.ProductDateCreateHeader</th>
+            <th>@StorePageResource.ButtonEditProduct</th>
+        </tr>
+        @{
+            var oeRow = 0;
+            string classRow = "";
+        }
+        @foreach (var productData in Model.ListProduct)
+        {
+            oeRow++;
+            if (oeRow == 2)
+            {
+                oeRow = 0;
+            }
+            classRow = "r" + oeRow;
+            <tr class="@classRow">
+                <td>@productData.Name</td>
+                <td>@productData.Unit</td>
+                <td>@String.Format("{0:n0} đ", productData.Price)</td>
+                <td>@productData.ProductCat.Name</td>
+                <td>@productData.DateCreate</td>
+                <td>
+                    @Html.ActionLink(StorePageResource.ButtonEditProduct, "EditProduct", "Store", new { Id = productData.ID }, new { Class = "btn btn-default" })
+                </td>
+            </tr>
+        }
+    </table>
+</div>

@@ -1,0 +1,145 @@
+﻿@model ff.coffee.webapp.Models.OrderViewModels
+
+@if (Model.ListOrder != null)
+{
+  <h1>@OrderPageResource.OrderedListHeader</h1>
+  @Html.ActionLink(OrderPageResource.PayTableButton + " " + Model.TableName, "Payment", "Order", new { timeIn = Model.TimeIn, tableId = Model.TableID, tableName = Model.TableName }, new { Class = "btn btn-lg btn-info", Id = "linkPrintPage" })
+  <button class="btn btn-lg btn-default" onclick="goToPrintPage()">
+    @OrderPageResource.PrintInvoice
+  </button>
+  <div class="panel panel-default">
+    <table id="lstOrdered" class="table">
+      <tr class="header">
+        <th>@OrderPageResource.OrderTimeLabel</th>
+        <th>@OrderPageResource.OrderTableLabel</th>
+        <th>@OrderPageResource.OrderProductLabel</th>
+        <th>@OrderPageResource.OrderUnitLabel</th>
+        <th>@OrderPageResource.OrderQuantityLabel</th>
+        <th>@OrderPageResource.OrderPriceLabel</th>
+        <th>@OrderPageResource.OrderCostlabel</th>
+        <th>@OrderPageResource.OrderStatusLabel</th>
+        <th>@OrderPageResource.OrderNotesLabel</th>
+      </tr>
+      @{
+  var oeRow = 0;
+  decimal cost;
+  decimal total = 0;
+  string classRow;
+  string classNotes;
+  string orderParam;
+      }
+      @foreach (var orderData in Model.ListOrder)
+      {
+        oeRow++;
+        cost = orderData.Quantity.Value * orderData.Product.Price.Value;
+        total += cost;
+        orderParam = "?tableId=" + orderData.TableID + "&productId=" + orderData.ProductID;
+        if (oeRow == 2)
+        {
+          oeRow = 0;
+        }
+        classRow = "r" + oeRow;
+        classNotes = String.IsNullOrEmpty(orderData.Notes) ? "btn btn-info" : "btn btn-danger";
+        <tr class="@classRow">
+          <td>@orderData.TimeIn</td>
+          <td>@orderData.CoffeeTable.Name</td>
+          <td>@orderData.Product.Name</td>
+          <td>@orderData.Product.Unit</td>
+          <td>
+            <input id="qoProduct@(orderData.ID)" type="number" readonly="readonly" value="@orderData.Quantity" />
+            <button id="btnSendQuantityOrder@(orderData.ID)" onclick="updateOrder('@orderParam', @orderData.ID, this)" style="display:none;" class="btn btn-default">@OrderPageResource.ButtonSaveOrder</button>
+          </td>
+          <td>@String.Format("{0:n0} đ", orderData.Product.Price)</td>
+          <td>@String.Format("{0:n0} đ", cost)</td>
+          <td>
+            <a href="javascript:void(0)" onclick="enableUpdateOrder(@orderData.ID)" class="btn btn-warning">@OrderPageResource.OrderChangeQuantity</a>
+            @{
+        /*if (!orderData.ChefDone.Value)
+                            {
+
+                                if (orderData.ChefConfirm.Value)
+                                {
+                                    if (!User.IsInRole("Order"))
+                                    {
+                                        <a href="javascript:void(0)" onclick="enableUpdateOrder(@orderData.ID)" class="btn btn-success">@OrderPageResource.OrderStatusConfirm</a>
+                                    }
+                                    else
+                                    {
+                                        <a href="javascript:void(0)" class="btn btn-success">@OrderPageResource.OrderStatusConfirm</a>
+                                    }
+                                }
+                                else
+                                {
+                                    <a href="javascript:void(0)" onclick="enableUpdateOrder(@orderData.ID)" class="btn btn-warning">@OrderPageResource.OrderChangeQuantity</a>
+                                }
+                            }
+                            else
+                            {
+                                <span class="label label-primary">
+                                    @OrderPageResource.OrderStatusDone
+                                </span>
+                            }
+                        */}
+          </td>
+          <td>
+            <a href="javascript:void(0)" onclick="updateNotes(@orderData.ID)" class="@classNotes">@OrderPageResource.OrderNotesLabel</a>
+          </td>
+        </tr>
+        <tr style="display:none;" id="@("row" + orderData.ID)">
+          <td colspan="7">
+            <input id="@("txtNotes" + orderData.ID)" type="text" class="form-control" value="@orderData.Notes" />
+          </td>
+          <td>
+            <a class="btn btn-warning" href="javascript:void(0)" onclick="updateOrder('@orderParam', @orderData.ID, this)">@OrderPageResource.ButtonSaveOrderNotes</a>
+          </td>
+        </tr>
+      }
+      <tr>
+        <td><span class="label label-danger">@OrderPageResource.OrderTotalLabel</span></td>
+        <td colspan="5">&nbsp;</td>
+        <td><span class="label label-success">@String.Format("{0:n0} đ", total)</span></td>
+      </tr>
+    </table>
+    <script type="text/javascript">
+      function updateNotes(orderId) {
+        $("#row" + orderId).fadeToggle();
+      }
+
+      function enableUpdateOrder(orderID) {
+        $("#btnSendQuantityOrder" + orderID).fadeToggle();
+        var btnStatus = $("#btnSendQuantityOrder" + orderID).attr("style");
+
+        if (btnStatus === "display: inline-block; opacity: 0;" || btnStatus === "opacity: 0;") {
+          $("#qoProduct" + orderID).removeAttr("readonly");
+        } else {
+          $("#qoProduct" + orderID).attr("readonly", "readonly");
+        }
+      }
+
+      function updateOrder(orderParam, orderId, thisButton) {
+        var postUrl = "Order/UpdateOrderNotes" + orderParam,
+            strNotes = $("#txtNotes" + orderId).val(),
+            updateQuantity = $("#qoProduct" + orderId).val();
+
+        $(thisButton).hide();
+        postUrl += "&orderNote=" + strNotes;
+        postUrl += "&orderQuantity=" + updateQuantity;
+        $.ajax({
+          type: "GET",
+          url: postUrl,
+          success: function (data) {
+            $(thisButton).show();
+            location.reload();
+          }
+        });
+      }
+
+      function goToPrintPage() {
+        var printUrl = $("#linkPrintPage").attr("href");
+        window.open(printUrl, "Printing", "width=600, height=400");
+      }
+    </script>
+  </div>
+}
+
+@Html.Partial("_AddOrderPartial", Model)

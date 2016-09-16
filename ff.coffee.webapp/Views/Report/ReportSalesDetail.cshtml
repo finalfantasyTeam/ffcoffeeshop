@@ -1,0 +1,62 @@
+﻿@model ff.coffee.webapp.Models.ReportViewModels
+
+<h1>@ReportPageResource.ReportSalesDetailHeader</h1>
+@if (Model.ListInvoiceDetails != null)
+{
+     <div class="center-block">
+        <h3>
+            <a href="@Url.Content("~/Home/CoffeeTable/0")">
+                <span class="label label-success">@Model.TableName</span>
+            </a>
+        </h3>
+    </div>
+    <div id="ReportSalesResults" class="panel panel-default">
+        <table class="table">
+            <tr class="header">
+                <th>@ReportPageResource.SalesDetailStaffHeader</th>
+                <th>@ReportPageResource.SalesDetailProductHeader</th>
+                <th>@ReportPageResource.SalesDetailUnitHeader</th>
+                <th>@ReportPageResource.SalesDetailQuantityHeader</th>
+                <th>@ReportPageResource.SalesDetailPriceHeader</th>
+                <th>@ReportPageResource.SalesDetailCostHeader</th>
+            </tr>
+            @{
+                var oeRow = 0;
+                string classRow = "";
+                decimal total = 0;
+                decimal cost;
+            }
+            @foreach (var detail in Model.ListInvoiceDetails)
+            {
+                oeRow++;
+                if (oeRow == 2)
+                {
+                    oeRow = 0;
+                }
+                classRow = "r" + oeRow;
+                cost = detail.Price * detail.Quantity;
+                total += cost;
+                <tr class="@classRow">
+                    <td>@detail.UserOrder</td>
+                    <td>@detail.Product.Name </td>
+                    <td>@detail.Product.Unit</td>
+                    <td>@detail.Quantity</td>
+                    <td>@String.Format("{0:n0} đ", detail.Price)</td>
+                    <td>@String.Format("{0:n0} đ", cost)</td>
+                </tr>
+            }
+            <tr>
+                <td colspan="5">
+                    <h2>
+                        <span class="label label-danger">@ReportPageResource.SalesDetailTotalHeader</span>
+                    </h2>
+                </td>
+                <td>
+                    <h2>
+                        <span class="label label-success">@String.Format("{0:n0} đ", total)</span>
+                    </h2>
+                </td>
+            </tr>
+        </table>
+    </div>
+}

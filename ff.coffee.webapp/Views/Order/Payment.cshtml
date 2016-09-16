@@ -1,0 +1,153 @@
+﻿@using ff.coffee.webapp.Models
+@model OrderViewModels
+@{
+  Layout = null;
+  RestaurantViewModels restVM = new RestaurantViewModels();
+  restVM.GetDataToModel(1);
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <link rel="icon" href="favicon.ico" type="image/x-icon">
+  <title>@ViewBag.Title</title>
+  <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  @Styles.Render("~/Content/bootstrap")
+  @Styles.Render("~/Content/css")
+  @Scripts.Render("~/bundles/modernizr")
+</head>
+<body onload="initPrinter()">
+  <div class="center-block">
+    <table class="pay-table">
+      <tr>
+        <td>
+          <img alt="@restVM.Name" title="@restVM.Name" src="@Url.Content("~/Images/logo.png")" />
+        </td>
+        <td style="text-align: justify;">
+          <h2>@restVM.Name</h2>
+          <p>@restVM.Address</p>
+          <p>@(OrderPageResource.PayPhoneLabel + restVM.Phone)</p>
+        </td>
+      </tr>
+    </table>
+    <div class="pay-title"><h3>@OrderPageResource.PayTitle</h3></div>
+    <div>
+      <h3>
+        <a class="cursor-normal" onclick="GoToListTable()">
+          <span class="label label-success">@OrderPageResource.PayTableLabel @Model.TableName</span>
+        </a>
+      </h3>
+      <h3>@OrderPageResource.PayCashierLabel<span style="font-weight:bold;">@User.FullName</span></h3>
+    </div>
+    <div style="font-weight:bold">@OrderPageResource.PayTimeLabel @DateTime.Now</div>
+    <table class="pay-table">
+      <tr class="header">
+        <th width="40%">@OrderPageResource.OrderProductLabel</th>
+        <th width="10%">@OrderPageResource.PayQuantityLabel</th>
+        <th width="25%">@OrderPageResource.OrderPriceLabel</th>
+        <th width="25%">@OrderPageResource.PayCostLabel</th>
+      </tr>
+      @{
+        var oeRow = 0;
+        int totalQuantity = 0;
+        decimal cost;
+        decimal total = 0;
+        string classRow;
+        bool isPaid = false;
+      }
+      @using (Html.BeginForm("Paid", "Order", FormMethod.Post, null))
+      {
+        foreach (var orderData in Model.ListOrder)
+        {
+          oeRow++;
+          cost = orderData.Quantity.Value * orderData.Product.Price.Value;
+          total += cost;
+          totalQuantity += orderData.Quantity.Value;
+          isPaid = orderData.Paid.Value;
+          if (oeRow == 2)
+          {
+            oeRow = 0;
+          }
+          classRow = "r" + oeRow;
+          @Html.Hidden("txtOrderID[]", orderData.ID)
+          <tr class="@classRow">
+            <td>@orderData.Product.Name</td>
+            <td>@orderData.Quantity</td>
+            <td>@String.Format("{0:n0} đ", orderData.Product.Price)</td>
+            <td>@String.Format("{0:n0} đ", cost)</td>
+          </tr>
+        }
+        <tr>
+          <td colspan="2">
+            <span class="panel-title total-label">@OrderPageResource.OrderDiscountLabel</span>
+          </td>
+          <td>&nbsp;</td>
+          <td>
+            @Html.TextBoxFor(m => m.Discount, new { id = "txtDiscount",Class = "pay-discount" })
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <span class="panel-title total-label">@OrderPageResource.OrderTotalLabel</span>
+          </td>
+          <td>
+            @Html.HiddenFor(m => m.TableID)
+            @Html.HiddenFor(m => m.TableName)
+            @Html.Hidden("txtTotal", total)
+            @Html.HiddenFor(m => m.TimeIn)
+          </td>
+          <td>
+            @if(total > 0)
+            { 
+              <button class="btn btn-primary @(isPaid ? "disabled" : String.Empty)" style="padding:0;" type="submit">
+                <span id="lblTotal" class="panel-title total-label">@String.Format("{0:n0} đ", total)</span>
+              </button>
+            }
+          </td>
+        </tr>
+      }
+      @{/*
+            <tr>
+                <td colspan="2">
+                    <span class="panel-title">@OrderPageResource.PayDiscountLabel</span>
+                </td>
+                <td>
+                    <input id="txtDiscount" type="text" class="form-control-static" aria-label="Discount percentage">
+                </td>
+                <td>
+                    <button class="btn btn-primary" type="submit">
+                        <span id="txtFinalTotal" class="panel-title" style="font-weight:bold;">@String.Format("{0:n0} đ", total)</span>
+                    </button>
+                </td>
+            </tr>
+            */ }
+    </table>
+  </div>
+  <div class="center-block thanks-footer">
+    <h2 class="label label-primary">@OrderPageResource.PayThanksLabel</h2>
+  </div>
+  @Scripts.Render("~/bundles/jquery")
+  @Scripts.Render("~/bundles/bootstrap")
+  @Scripts.Render("~/bundles/ffscript")
+  <script type="text/javascript">
+    function GoToListTable() {
+      document.location = '@Url.Content("~/Home/CoffeeTable/0")';
+    }
+
+    function initPrinter() {
+      var viewPortWidth;
+      var viewPortHeight;
+
+      if (typeof window.innerWidth != 'undefined') {
+        viewPortWidth = window.innerWidth,
+        viewPortHeight = window.innerHeight
+      }
+
+      if (viewPortWidth === 600 && viewPortHeight === 400) {
+        window.print();
+      }
+    }
+  </script>
+</body>
+</html>

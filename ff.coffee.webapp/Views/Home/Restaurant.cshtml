@@ -1,0 +1,38 @@
+﻿@model ff.coffee.webapp.Models.RestaurantViewModels
+
+<h1>@HomePageResource.RestListHeader</h1>
+@Html.ActionLink(HomePageResource.ButtonAddNewRest, "AddRestaurant", "Setting", new { Id = 0 }, new { Class = "btn btn-lg btn-info" })
+
+<div class="panel panel-default">
+  <table class="table">
+    <tr class="header">
+      <th>@HomePageResource.RestNameHeader</th>
+      <th>@HomePageResource.RestAddressHeader</th>
+      <th>@HomePageResource.RestListSalePointHeader</th>
+      <th>@HomePageResource.ButtonEditRest</th>
+    </tr>
+    @{
+      var oeRow = 0;
+      string classRow = "";
+    }
+    @foreach (var resData in Model.ListRestaurant)
+    {
+      oeRow++;
+      if (oeRow == 2)
+      {
+        oeRow = 0;
+      }
+      classRow = "r" + oeRow;
+      <tr class="@classRow">
+        <td>@resData.Name</td>
+        <td>@resData.Address</td>
+        <td>
+          @Html.ActionLink(HomePageResource.RestListSalePointLabel, "SalePoint", "Home", new { Id = resData.ID }, new { Class = "btn btn-warning" })
+        </td>
+        <td>
+          @Html.ActionLink(HomePageResource.ButtonEditRest, "EditRestaurant", "Setting", new { Id = resData.ID }, new { Class = "btn btn-default" })
+        </td>
+      </tr>
+    }
+  </table>
+</div>
